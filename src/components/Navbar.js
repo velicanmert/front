@@ -11,10 +11,7 @@ function Navbar() {
 
   const showSidebar = () => setSidebar(!sidebar);
 
-  if (
-    /*localStorage.getItem('token')*/ localStorage.getItem('loginClicked') ===
-    'clicked'
-  ) {
+  if (localStorage.getItem('user_info')) {
     return (
       <>
         <IconContext.Provider value={{ color: '#fff' }}>

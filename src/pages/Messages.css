@@ -14,3 +14,12 @@
   position: absolute;
   bottom: 0;
 }
+
+.chat-list {
+  margin-left: 28%;
+}
+
+.Send-Button {
+  position: absolute;
+  bottom: 0;
+}

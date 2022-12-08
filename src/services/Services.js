@@ -1,20 +1,32 @@
 import axios from 'axios';
 
-const LOGIN_API_URL = 'http://localhost:8080/api/login';
-const REGISTER_API_URL = 'http://localhost:8080/api/register';
+export const WS_URL = 'ws://inchat.webhop.me:3014/';
+const REGISTER_API_URL = '';
+export const api = axios.create({
+  baseURL: 'http://inchat.webhop.me:3013/'
+});
 
 export const login = async (id, pw) => {
-  let info = { username: id, password: pw };
-  let token = (await axios.post(LOGIN_API_URL, info)).data;
-  axios.defaults.headers.common = { Authorization: `Bearer ${token}` };
-  return token;
+  let info = { email: id, password: pw };
+  const LOGIN_API_URL = 'user/login';
+
+  let response = await api.post(LOGIN_API_URL, info, {
+    validateStatus: false
+  });
+  return response;
 };
 
-export const register = async (id, pw, bdate) => {
+export const register = async (id, sr, username, email, pw) => {
   let info = {
-    username: id,
-    password: pw,
-    birth_date: bdate
+    name: id,
+    surname: sr,
+    username: username,
+    email: email,
+    password: pw
   };
-  await axios.post(REGISTER_API_URL, info);
+  let response = await api.post(REGISTER_API_URL, info, {
+    validateStatus: false
+  });
+
+  return response;
 };

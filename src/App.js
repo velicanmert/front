@@ -8,9 +8,7 @@ import Register from './pages/Register';
 import Messages from './pages/Messages';
 
 function App() {
-  localStorage.removeItem('isAdmin');
-  localStorage.removeItem('username');
-  localStorage.removeItem('loginClicked');
+  localStorage.removeItem('user_info');
   return (
     <div className='App'>
       <Router>

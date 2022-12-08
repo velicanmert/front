@@ -8,10 +8,26 @@
   margin-top: 1rem;
 }
 
+.surname {
+  margin-top: 2%;
+}
+
+.email {
+  margin-top: 2%;
+}
+
 .password {
   margin-top: 2%;
 }
 
 .bdate {
   margin-top: 2%;
+}
+
+.username {
+  margin-top: 2%;
+}
+
+.errorMes {
+  color: red;
 }

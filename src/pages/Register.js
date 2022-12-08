@@ -30,30 +30,69 @@ function Register() {
 
   const state = {
     pw: '',
-    id: '',
-    bdate: ''
+    name: '',
+    surname: '',
+    username: '',
+    email: ''
   };
 
-  const getId = value => {
-    state.id = value;
+  const getName = value => {
+    state.name = value;
+  };
+
+  const getSurname = value => {
+    state.surname = value;
+  };
+
+  const getUsername = value => {
+    state.username = value;
+  };
+
+  const getEmail = value => {
+    state.email = value;
   };
 
   const getPassword = value => {
     state.pw = value;
   };
 
-  const getBdate = value => {
-    state.bdate = value;
-  };
+  const [errorMes, setErrorMes] = useState('');
 
-  const registerMethod = (id, pw, bdate) => {
-    register(id, pw, bdate);
+  const registerMethod = (name, surname, username, email, password) => {
+    register(name, surname, username, email, password).then(res => {
+      // If failed
+      if (res.status !== 200) {
+        console.log('User already exists with given email or username.');
+        setErrorMes('User already exists with given email or username.');
+      } else {
+        setErrorMes('');
+        // console.log({
+        //   username: res.data.result.user.username,
+        //   email: res.data.result.user.email,
+        //   full_name: res.data.result.user.name + res.data.result.user.surname,
+        //   token: res.data.result.token
+        // });
+        localStorage.setItem('user_info', {
+          username: res.data.result.user.username,
+          email: res.data.result.user.email,
+          full_name: res.data.result.user.name + res.data.result.user.surname,
+          token: res.data.result.token
+        });
+        history.push('/home');
+      }
+    });
   };
 
   let history = useHistory();
 
   const handleRegisterButton = () => {
-    registerMethod(state.id, state.pw, state.bdate);
+    registerMethod(
+      state.name,
+      state.surname,
+      state.username,
+      state.email,
+      state.password
+    );
     history.push('/');
   };
 
@@ -65,6 +104,39 @@ function Register() {
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
     >
+      <div className='errorMes'>{errorMes}</div>
+      <Form.Item
+        label='name'
+        name='name'
+        rules={[
+          {
+            required: true,
+            message: 'Please input your name!'
+          }
+        ]}
+      >
+        <Input
+          placeholder='name'
+          onChange={event => getName(event.target.value)}
+        />
+      </Form.Item>
+
+      <Form.Item
+        label='surname'
+        name='surname'
+        rules={[
+          {
+            required: true,
+            message: 'Please input your surname!'
+          }
+        ]}
+      >
+        <Input
+          placeholder='surname'
+          onChange={event => getSurname(event.target.value)}
+        />
+      </Form.Item>
+
       <Form.Item
         label='username'
         name='username'
@@ -77,7 +149,23 @@ function Register() {
       >
         <Input
           placeholder='username'
-          onChange={event => getId(event.target.value)}
+          onChange={event => getUsername(event.target.value)}
+        />
+      </Form.Item>
+
+      <Form.Item
+        label='email'
+        name='email'
+        rules={[
+          {
+            required: true,
+            message: 'Please input your email!'
+          }
+        ]}
+      >
+        <Input
+          placeholder='email'
+          onChange={event => getEmail(event.target.value)}
         />
       </Form.Item>
 
@@ -95,23 +183,6 @@ function Register() {
         <Input.Password
           placeholder='password'
           onChange={event => getPassword(event.target.value)}
-        />
-      </Form.Item>
-
-      <Form.Item
-        className='bdate'
-        label='birthdate'
-        name='bdate'
-        rules={[
-          {
-            required: true,
-            message: 'Please input your birth date!'
-          }
-        ]}
-      >
-        <Input
-          placeholder='dd-mm-yyyy'
-          onChange={event => getBdate(event.target.value)}
         />
       </Form.Item>
 

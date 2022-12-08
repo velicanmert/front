@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Form, Input, Button } from 'antd';
 import './Login.css';
-import { useHistory } from 'react-router-dom';
-import { login, getUsers } from '../services/Services';
+import { useHistory, useState } from 'react-router-dom';
+import { login, getUsers, api } from '../services/Services';
 
 function Login() {
+  const [email, setEmail] = useState('');
+
   const layout = {
     labelCol: {
       span: 8
@@ -33,7 +35,7 @@ function Login() {
     userName: ''
   };
 
-  const getUserName = value => {
+  const setUsername = value => {
     localStorage.setItem('username', value);
     state.userName = value;
   };
@@ -44,33 +46,39 @@ function Login() {
 
   let history = useHistory();
 
-  const [errorM /*setErrorM*/] = useState('');
+  const [errorM, setErrorM] = useState('');
 
   const loginMethod = (id, pw) => {
-    /*setErrorM(
-      'Girilen kullanıcı adı ve şifre ikilisi sistemde bulunmamaktadır!'
-    );
-    login(id, pw).then(res => {
-      state.token = res;
-      getUsers().then(ress => {
-        if (ress.status === 'active') {
-          setErrorM('');
-          localStorage.setItem('token', state.token);
-          history.push('/home');
-        } else {
-          setErrorM(
-            'Aktif bir kullanıcı değilsiniz! Lütfen, adminle iletişime geçin.'
-          );
-        }
-      });
-    });*/
+    console.log('hello');
 
-    history.push('/home');
+    login(id, pw).then(res => {
+      // If failed
+      if (res.status !== 200) {
+        console.log('wrong creddentials');
+        setErrorM('Wrong credentials');
+      } else {
+        setErrorM('');
+        // console.log({
+        //   username: res.data.result.user.username,
+        //   email: res.data.result.user.email,
+        //   full_name: res.data.result.user.name + res.data.result.user.surname,
+        //   token: res.data.result.token
+        // });
+        localStorage.setItem('user_info', {
+          username: res.data.result.user.username,
+          email: res.data.result.user.email,
+          full_name: res.data.result.user.name + res.data.result.user.surname,
+          token: res.data.result.token
+        });
+        history.push('/home');
+      }
+    });
+
+    // let token = (await api.post(LOGIN_API_URL, info)).data;
   };
 
   const handleLoginButton = () => {
     loginMethod(localStorage.getItem('username'), state.pw);
-    localStorage.setItem('loginClicked', 'clicked');
   };
 
   return (
@@ -94,7 +102,7 @@ function Login() {
       >
         <Input
           placeholder='username'
-          onChange={event => getUserName(event.target.value)}
+          onChange={event => setUsername(event.target.value)}
         />
       </Form.Item>
 
