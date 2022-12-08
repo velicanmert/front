@@ -1,0 +1,16 @@
+.textPage {
+  font-size: 2.5rem;
+  margin-left: 50%;
+  margin-top: 5%;
+}
+
+.SubmitSend {
+  position: absolute;
+  bottom: 0;
+  margin-left: 25%;
+}
+
+.textBox {
+  position: absolute;
+  bottom: 0;
+}
